@@ -1,0 +1,103 @@
+@import '@fontsource-variable/martian-mono/standard.css';
+@import '@fontsource-variable/schibsted-grotesk';
+@import 'tailwindcss';
+
+/*
+ * Tokens de cor. Escuro (espresso) é o padrão; claro entra via data-theme="light".
+ * Valores e racional em docs/design.md.
+ */
+:root {
+  color-scheme: dark;
+  --bg: #1a1310;
+  --surface: #241b16;
+  --line: #3a2d25;
+  --text: #ede3d9;
+  --muted: #a8978a;
+  --accent: #f2a541;
+  --accent-ink: #1a1310;
+  --ok: #7fb77e;
+  --code-key: #e7c08a;
+  --code-string: #b9cf8f;
+  --code-number: #f2a541;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f6f4f1;
+  --surface: #ffffff;
+  --line: #e2dbd3;
+  --text: #2a1f19;
+  --muted: #6b5c52;
+  --accent: #9a5800;
+  --accent-ink: #ffffff;
+  --ok: #3d7a3c;
+  --code-key: #7a4a12;
+  --code-string: #4f6b1f;
+  --code-number: #9a5800;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-ok: var(--ok);
+
+  --font-sans: 'Schibsted Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Martian Mono Variable', ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 106.25%; /* 17px: base confortável para a Schibsted */
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background: var(--bg);
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: var(--line);
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

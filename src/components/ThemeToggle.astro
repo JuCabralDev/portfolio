@@ -1,0 +1,61 @@
+---
+interface Props {
+  labelToLight: string;
+  labelToDark: string;
+}
+
+const { labelToLight, labelToDark } = Astro.props;
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  data-label-light={labelToLight}
+  data-label-dark={labelToDark}
+  aria-label={labelToLight}
+  class="grid size-8 place-items-center rounded text-muted hover:bg-surface hover:text-text"
+>
+  <!-- Sol aparece no tema escuro (ação: ir para o claro); lua no claro. -->
+  <svg class="size-4 theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </svg>
+  <svg class="size-4 theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-icon-moon {
+    display: none;
+  }
+  :global(:root[data-theme='light']) .theme-icon-sun {
+    display: none;
+  }
+  :global(:root[data-theme='light']) .theme-icon-moon {
+    display: block;
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+
+  function syncLabel(button: HTMLElement) {
+    const isLight = root.dataset.theme === 'light';
+    button.setAttribute('aria-label', (isLight ? button.dataset.labelDark : button.dataset.labelLight) ?? '');
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((button) => {
+    syncLabel(button);
+    button.addEventListener('click', () => {
+      const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {
+        // Sem storage (aba privada, bloqueio): o tema vale só nesta visita.
+      }
+      syncLabel(button);
+    });
+  });
+</script>

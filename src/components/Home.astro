@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from './Section.astro';
+import { sections, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const headline = lang === 'pt' ? 'Desenvolvedora Back-end Java' : 'Java Back-end Developer';
+---
+
+<Base lang={lang}>
+  <div id="top" class="py-20 sm:py-32">
+    <h1 class="font-mono text-3xl font-semibold tracking-tight [font-stretch:112.5%] sm:text-5xl">Julia Medeiros</h1>
+    <p class="mt-4 max-w-[60ch] text-lg text-muted">{headline}</p>
+  </div>
+
+  {
+    sections.map((s) => (
+      <Section id={s} route={t(`nav.${s}`)}>
+        <p class="max-w-[65ch] text-muted">TODO</p>
+      </Section>
+    ))
+  }
+</Base>
