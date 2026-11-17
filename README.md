@@ -1,4 +1,4 @@
-# Portfólio · Julia Medeiros
+# Portfólio · Júlia Cabral
 
 Site pessoal de desenvolvedora back-end Java. Página única, em português e inglês, com os projetos
 apresentados como respostas de uma API: rota, status, stack, decisões de arquitetura e trechos de código.

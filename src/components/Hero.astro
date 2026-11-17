@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import avatar from '../assets/avatar.jpg';
+import CurlTerminal from './CurlTerminal.astro';
+import { profile } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
+import type { Content } from '../data/content';
+
+interface Props {
+  lang: Lang;
+  c: Content;
+}
+
+const { lang, c } = Astro.props;
+const t = useTranslations(lang);
+// Porta 8080: o padrão do Spring Boot.
+const command = 'curl localhost:8080/api/julia';
+---
+
+<div id="top" class="grid items-center gap-12 py-16 sm:py-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16">
+  <div class="min-w-0">
+    <Image
+      src={avatar}
+      alt={t('hero.photoAlt')}
+      width={112}
+      height={112}
+      densities={[1, 2]}
+      loading="eager"
+      class="size-20 rounded-full border border-line object-cover sm:size-24"
+    />
+    <h1 class="mt-8 font-mono text-[2.1rem] leading-[1.05] font-semibold tracking-tight [font-stretch:112.5%] sm:text-5xl">
+      {profile.name}
+    </h1>
+    <p class="mt-3 font-mono text-sm text-accent [font-stretch:87.5%] sm:text-base">{c.headline}</p>
+    <p class="mt-6 max-w-[46ch] text-lg text-muted">{c.intro}</p>
+
+    <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+      <a
+        href={profile.cv}
+        download
+        class="rounded-md bg-accent px-4 py-2.5 font-medium text-accent-ink no-underline hover:brightness-110"
+      >
+        {c.cvLabel}
+      </a>
+      <a href={profile.github} class="font-medium underline">GitHub</a>
+      <a href={profile.linkedin} class="font-medium underline">LinkedIn</a>
+    </div>
+  </div>
+
+  <CurlTerminal command={command} body={c.apiResponse} label={t('hero.terminalLabel')} />
+</div>

@@ -1,7 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import ThemeToggle from './ThemeToggle.astro';
-import { sections, useTranslations, type Lang } from '../i18n/ui';
+import { navSections, useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -17,13 +17,13 @@ const otherLang: Lang = lang === 'pt' ? 'en' : 'pt';
 >
   <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-8">
     <a href="#top" class="font-mono text-sm font-medium tracking-tight no-underline [font-stretch:87.5%]">
-      julia<span class="text-accent">.</span>medeiros
+      júlia<span class="text-accent">.</span>cabral
     </a>
 
     <nav aria-label={t('nav.label')} class="order-last -mx-1 w-full overflow-x-auto md:order-none md:w-auto md:flex-1">
       <ul class="flex gap-1 font-mono text-xs [font-stretch:87.5%]">
         {
-          sections.map((s) => (
+          navSections.map((s) => (
             <li>
               <a
                 href={`#${s}`}

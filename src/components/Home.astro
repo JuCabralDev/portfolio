@@ -1,7 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import Section from './Section.astro';
-import { sections, useTranslations, type Lang } from '../i18n/ui';
+import Hero from './Hero.astro';
+import { content } from '../data/content';
+import { profile } from '../data/profile';
+import { useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
   lang: Lang;
@@ -9,20 +12,107 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const headline = lang === 'pt' ? 'Desenvolvedora Back-end Java' : 'Java Back-end Developer';
+const c = content[lang];
+
+const contactLinks = [
+  { label: c.contact.email, href: `mailto:${profile.email}`, text: profile.email },
+  { label: c.contact.linkedin, href: profile.linkedin, text: 'in/jucabraldev' },
+  { label: c.contact.github, href: profile.github, text: 'JuCabralDev' },
+  { label: c.contact.cv, href: profile.cv, text: 'cv-julia-cabral.pdf', download: true },
+];
 ---
 
 <Base lang={lang}>
-  <div id="top" class="py-20 sm:py-32">
-    <h1 class="font-mono text-3xl font-semibold tracking-tight [font-stretch:112.5%] sm:text-5xl">Julia Medeiros</h1>
-    <p class="mt-4 max-w-[60ch] text-lg text-muted">{headline}</p>
-  </div>
+  <Hero lang={lang} c={c} />
 
-  {
-    sections.map((s) => (
-      <Section id={s} route={t(`nav.${s}`)}>
-        <p class="max-w-[65ch] text-muted">TODO</p>
-      </Section>
-    ))
-  }
+  <Section id="sobre" route={t('nav.sobre')}>
+    <div class="max-w-[65ch] space-y-5 text-lg">
+      {c.about.map((p) => <p>{p}</p>)}
+    </div>
+  </Section>
+
+  <Section id="stack" route={t('nav.stack')}>
+    <div class="grid gap-14 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <dl class="grid max-w-[65ch] gap-x-8 gap-y-4 sm:grid-cols-[9rem_1fr]">
+        {
+          c.stack.map(({ group, items }) => (
+            <>
+              <dt class="pt-0.5 font-mono text-xs text-muted [font-stretch:87.5%] sm:text-sm">{group}</dt>
+              <dd class="-mt-3 mb-2 sm:m-0">{items.join(', ')}</dd>
+            </>
+          ))
+        }
+      </dl>
+
+      <div>
+        <h3 class="font-mono text-sm text-accent [font-stretch:87.5%]">{c.studying.title}</h3>
+        <ul class="mt-4 space-y-4">
+          {
+            c.studying.items.map(({ name, why }) => (
+              <li>
+                <p class="font-medium">{name}</p>
+                <p class="text-muted">{why}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="projetos" route={t('nav.projetos')}>
+    <p class="max-w-[65ch] text-muted">TODO: fase 3 (projetos).</p>
+  </Section>
+
+  <Section id="experiencia" route={t('nav.experiencia')}>
+    <ol class="max-w-[72ch] border-l border-line">
+      {
+        c.experience.map((job) => (
+          <li class="relative pb-12 pl-6 last:pb-0 sm:pl-8">
+            <span class="absolute top-2 -left-[5px] size-[9px] rounded-full border border-accent bg-bg" aria-hidden="true" />
+            <p class="font-mono text-xs text-muted [font-stretch:87.5%]">
+              <time datetime={job.start}>{job.period}</time>
+            </p>
+            <h3 class="mt-1 text-xl font-semibold">{job.role}</h3>
+            <p class="text-muted">{job.org}</p>
+            <ul class="mt-4 list-disc space-y-2 pl-5 marker:text-line">
+              {job.bullets.map((b) => <li>{b}</li>)}
+            </ul>
+          </li>
+        ))
+      }
+    </ol>
+  </Section>
+
+  <Section id="formacao" route={t('nav.formacao')}>
+    <ul class="max-w-[72ch] space-y-6">
+      {
+        c.education.map((e) => (
+          <li>
+            <p class="font-mono text-xs text-muted [font-stretch:87.5%]">{e.period}</p>
+            <h3 class="mt-1 text-xl font-semibold">{e.course}</h3>
+            <p class="text-muted">{e.school}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section id="contato" route={t('nav.contato')} method="POST">
+    <p class="max-w-[50ch] text-lg">{c.contact.lead}</p>
+    <dl class="mt-10 grid max-w-2xl gap-x-8 gap-y-3 sm:grid-cols-[9rem_1fr]">
+      {
+        contactLinks.map((l) => (
+          <>
+            <dt class="font-mono text-xs text-muted [font-stretch:87.5%] sm:pt-1 sm:text-sm">{l.label}</dt>
+            <dd class="-mt-2 mb-3 min-w-0 sm:m-0">
+              <a href={l.href} download={l.download} class="text-lg font-medium break-words underline">
+                {l.text}
+              </a>
+            </dd>
+          </>
+        ))
+      }
+    </dl>
+  </Section>
 </Base>
