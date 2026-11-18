@@ -1,0 +1,293 @@
+---
+/**
+ * Tela de "boot" na primeira visita da sessão: o log de um Spring Boot subindo enquanto uma xícara
+ * de café enche. Só aparece se o <head> marcou o <html> com .booting (ver Base.astro): sem JS, com
+ * prefers-reduced-motion ou numa segunda visita na mesma sessão, a página abre direto.
+ */
+import { Image } from 'astro:assets';
+import avatar from '../assets/avatar.jpg';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  projectCount: number;
+}
+
+const { lang, projectCount } = Astro.props;
+const L = {
+  pt: { label: 'Carregando o portfólio', skip: 'pular' },
+  en: { label: 'Loading the portfolio', skip: 'skip' },
+}[lang];
+---
+
+<div class="boot" role="dialog" aria-modal="true" aria-label={L.label} data-project-count={projectCount}>
+  <div class="boot-card">
+    <div class="boot-head">
+      <Image src={avatar} alt="" width={28} height={28} densities={[1, 2]} loading="eager" class="boot-avatar" />
+      <span class="boot-name">júlia<span class="text-accent">.</span>cabral</span>
+      <span class="boot-version">java 21</span>
+    </div>
+
+    <div class="boot-body">
+      <ol class="boot-log" aria-live="polite"></ol>
+
+      <svg class="boot-cup" viewBox="0 0 64 72" aria-hidden="true">
+        <defs>
+          <clipPath id="boot-cup-inside">
+            <path d="M15 31h30v15a13 13 0 0 1-13 13h-4a13 13 0 0 1-13-13V31z"></path>
+          </clipPath>
+        </defs>
+        <g class="boot-steam">
+          <path d="M24 24c-3-4 3-6 0-10s3-6 0-10"></path>
+          <path d="M32 24c-3-4 3-6 0-10s3-6 0-10"></path>
+          <path d="M40 24c-3-4 3-6 0-10s3-6 0-10"></path>
+        </g>
+        <g clip-path="url(#boot-cup-inside)">
+          <g class="boot-liquid">
+            <rect x="10" y="31" width="40" height="30" class="boot-coffee"></rect>
+            <rect x="10" y="31" width="40" height="2.5" class="boot-crema"></rect>
+          </g>
+        </g>
+        <path class="boot-outline" d="M14 30h32v16a14 14 0 0 1-14 14h-4a14 14 0 0 1-14-14V30z"></path>
+        <path class="boot-outline" d="M46 35h3.5a6 6 0 0 1 0 12H45"></path>
+        <path class="boot-outline" d="M8 65h44"></path>
+      </svg>
+    </div>
+
+    <div class="boot-foot">
+      <button type="button" class="boot-skip" data-boot-skip>{L.skip} <kbd>esc</kbd></button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .boot {
+    display: none;
+  }
+  :global(html.booting) {
+    overflow: hidden;
+  }
+  :global(html.booting) .boot {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    background: var(--bg);
+    transition: transform 0.45s cubic-bezier(0.7, 0, 0.84, 0);
+  }
+  /* Sai subindo como uma cortina (sem opacidade: o texto nunca fica com contraste baixo no meio). */
+  :global(html.booting.boot-out) .boot {
+    transform: translateY(-100%);
+  }
+
+  .boot-card {
+    width: min(480px, 100%);
+    border: 1px solid var(--line);
+    border-radius: 0.9rem;
+    background: var(--surface);
+    padding: 1.1rem 1.25rem 0.9rem;
+    font-family: var(--font-mono);
+    font-stretch: 87.5%;
+  }
+  .boot-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.8rem;
+  }
+  .boot-head :global(.boot-avatar) {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+  .boot-name {
+    font-weight: 600;
+  }
+  .boot-version {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 0.7rem;
+  }
+
+  .boot-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1rem;
+    min-height: 8.5rem;
+    padding-top: 0.9rem;
+  }
+  .boot-log {
+    font-size: 0.68rem;
+    line-height: 1.75;
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+  .boot-log :global(li) {
+    animation: boot-line 0.2s ease-out both;
+  }
+  .boot-log :global(.lvl) {
+    color: var(--ok);
+    margin-right: 0.6em;
+  }
+
+  .boot-cup {
+    width: 80px;
+    height: 90px;
+  }
+  .boot-outline {
+    fill: none;
+    stroke: var(--text);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .boot-coffee {
+    fill: var(--accent);
+  }
+  .boot-crema {
+    fill: var(--code-key);
+  }
+  .boot-liquid {
+    transform: translateY(calc((1 - var(--fill, 0)) * 30px));
+    transition: transform 0.12s linear;
+  }
+  .boot-steam path {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0;
+  }
+  .boot.is-full .boot-steam path {
+    animation: boot-steam 1.4s ease-in-out infinite;
+  }
+  .boot.is-full .boot-steam path:nth-child(2) {
+    animation-delay: 0.25s;
+  }
+  .boot.is-full .boot-steam path:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+
+  .boot-foot {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+  }
+  .boot-skip {
+    font-size: 0.7rem;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0.15rem 0.35rem;
+  }
+  .boot-skip:hover {
+    color: var(--text);
+  }
+  .boot-skip kbd {
+    margin-left: 0.3em;
+    padding: 0 0.3em;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    font-family: inherit;
+  }
+
+  @keyframes boot-line {
+    from {
+      transform: translateX(-6px);
+    }
+  }
+  @keyframes boot-steam {
+    0% {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    40% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const overlay = document.querySelector<HTMLElement>('.boot');
+
+  if (overlay && root.classList.contains('booting')) {
+    const log = overlay.querySelector<HTMLOListElement>('.boot-log')!;
+    const skip = overlay.querySelector<HTMLButtonElement>('[data-boot-skip]')!;
+    const projects = overlay.dataset.projectCount ?? '3';
+    const behind = Array.from(document.querySelectorAll<HTMLElement>('body > :not(.boot):not(script)')).filter(
+      (el) => !el.contains(overlay),
+    );
+    // O overlay mora dentro do <main>; o resto da página fica inerte enquanto ele está na tela.
+    const main = overlay.closest('main');
+    const siblings = main ? Array.from(main.children).filter((el) => el !== overlay) : [];
+    [...behind, ...siblings].forEach((el) => el.setAttribute('inert', ''));
+
+    const started = performance.now();
+    const FILL_MS = 2000;
+    const timers: number[] = [];
+    let raf = 0;
+    let finished = false;
+    let coffeeLine: HTMLElement | null = null;
+
+    const line = (text: string) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="lvl">INFO</span>`;
+      li.append(text);
+      log.append(li);
+      return li;
+    };
+
+    const tick = () => {
+      const fill = Math.min(1, (performance.now() - started) / FILL_MS);
+      overlay.style.setProperty('--fill', String(fill));
+      if (coffeeLine) coffeeLine.lastChild!.textContent = `Brewing coffee ${Math.round(fill * 100)}%`;
+      if (fill < 1) raf = requestAnimationFrame(tick);
+      else overlay.classList.add('is-full');
+    };
+
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      timers.forEach(clearTimeout);
+      cancelAnimationFrame(raf);
+      try {
+        sessionStorage.setItem('jc.booted', '1');
+      } catch {
+        // Sem storage: o boot aparece de novo na próxima carga, sem prejuízo.
+      }
+      root.classList.add('boot-out');
+      window.setTimeout(() => {
+        root.classList.remove('booting', 'boot-out');
+        [...behind, ...siblings].forEach((el) => el.removeAttribute('inert'));
+        document.dispatchEvent(new CustomEvent('boot:done'));
+      }, 450);
+    };
+
+    const at = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
+    at(0, () => line('Starting PortfolioApplication using Java 21'));
+    at(380, () => line(`Found ${projects} project repositories`));
+    at(760, () => {
+      coffeeLine = line('Brewing coffee 0%');
+    });
+    at(1500, () => line('Tomcat started on port 8080 (http)'));
+    at(2150, () => line(`Started PortfolioApplication in ${((performance.now() - started) / 1000).toFixed(1)} seconds`));
+    at(2750, finish);
+    raf = requestAnimationFrame(tick);
+
+    skip.addEventListener('click', finish);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') finish();
+    });
+  }
+</script>

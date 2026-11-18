@@ -21,12 +21,20 @@ O fundo é marrom-café, não preto neutro: amarra com Java (café) e foge do "p
 ## Tipografia
 - **Martian Mono** (variável, eixo de largura 75-112.5%): títulos-rota em largura expandida, nav e rótulos em
   largura condensada, blocos de código.
-- **Schibsted Grotesk**: texto corrido, base de 17px, linhas com no máximo cerca de 65ch.
+- **Schibsted Grotesk**: texto corrido, base de 16px, linhas com no máximo cerca de 65ch.
+- Escala contida (referência: o site do Arthur): nome no hero ~40px, títulos de seção ~24px, título de projeto ~24px.
 
 ## Regras
 - Alinhamento à esquerda em tudo.
 - Sem caixa-alta em rótulos, sem "→" em botões e sem metadados com "·". Metadados viram cabeçalhos HTTP.
-- Movimento: só a digitação do `curl` no hero, uma vez, e desligada com `prefers-reduced-motion`.
+- Movimento, tudo desligado com `prefers-reduced-motion`:
+  - **Boot** (primeira visita da sessão): log de um Spring Boot subindo enquanto uma xícara enche; sai como cortina.
+    Sem opacidade em texto, para o contraste nunca cair no meio da animação.
+  - **Fundo**: rede de pontos âmbar; o cursor vira um nó e se liga aos pontos próximos (no Gabriel eles fogem).
+    Só reage com mouse; no toque fica a deriva lenta.
+  - **Hero**: a digitação do `curl`, uma vez, depois do boot.
+- Ícones de tecnologia em uma cor (texto secundário) e na cor da marca no hover, ajustada para contraste ≥ 3:1.
+- Avatar quadrado com cantos arredondados.
 - Numeração só em sequência real (timeline de experiência).
 
 ## Evitar (referências)

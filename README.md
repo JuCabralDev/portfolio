@@ -48,6 +48,10 @@ docs/design.md           # decisões visuais
 `scripts/og/render.sh` gera `public/og-pt.png` e `public/og-en.png` (1200x630) a partir de `scripts/og/og.html`.
 Precisa do Chromium. Rode de novo quando mudar nome, cargo ou foto.
 
+## Créditos
+
+Ícones de tecnologia: [Simple Icons](https://simpleicons.org) (CC0) e, para o Java, [Devicon](https://devicon.dev) (MIT).
+
 ## Analytics
 
 Cloudflare Web Analytics, ativado no painel do projeto no Cloudflare Pages, que injeta o script no deploy.

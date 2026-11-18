@@ -1,0 +1,182 @@
+---
+/**
+ * Fundo interativo: pontos que derivam devagar e se ligam quando ficam perto, como serviços numa rede.
+ * O cursor vira mais um nó: os pontos ao redor se conectam a ele (como requisições) e são levemente
+ * puxados. Decorativo (aria-hidden), pausa com a aba escondida e fica parado com prefers-reduced-motion.
+ */
+---
+
+<canvas class="network-bg" aria-hidden="true"></canvas>
+
+<style>
+  .network-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  type Node = { x: number; y: number; vx: number; vy: number; r: number };
+
+  const canvas = document.querySelector<HTMLCanvasElement>('.network-bg');
+  const ctx = canvas?.getContext('2d');
+
+  if (canvas && ctx) {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const LINK = 120; // distância máxima entre dois nós ligados
+    const CURSOR_LINK = 170; // alcance do cursor
+    const pointer = { x: -9999, y: -9999, active: false };
+
+    let w = 0;
+    let h = 0;
+    let nodes: Node[] = [];
+    let raf = 0;
+    let colors = { dot: '', line: '' };
+
+    const readColors = () => {
+      const css = getComputedStyle(document.documentElement);
+      const accent = css.getPropertyValue('--accent').trim() || '#f2a541';
+      const light = document.documentElement.dataset.theme === 'light';
+      colors = { dot: accent, line: accent };
+      canvas.style.opacity = light ? '0.55' : '0.7';
+    };
+
+    const resize = () => {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.max(28, Math.min(110, Math.round((w * h) / 16000)));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: 0.8 + Math.random() * 1.1,
+      }));
+    };
+
+    const draw = (move: boolean) => {
+      ctx.clearRect(0, 0, w, h);
+
+      for (const n of nodes) {
+        if (move) {
+          if (pointer.active) {
+            const dx = pointer.x - n.x;
+            const dy = pointer.y - n.y;
+            const d = Math.hypot(dx, dy);
+            if (d < CURSOR_LINK && d > 1) {
+              // Puxão leve em direção ao cursor, sem colar nele.
+              const pull = (1 - d / CURSOR_LINK) * 0.012;
+              n.vx += dx * pull * 0.05;
+              n.vy += dy * pull * 0.05;
+            }
+          }
+          n.vx *= 0.985;
+          n.vy *= 0.985;
+          // Mantém uma deriva mínima para a rede nunca parar.
+          if (Math.abs(n.vx) < 0.05) n.vx += (Math.random() - 0.5) * 0.04;
+          if (Math.abs(n.vy) < 0.05) n.vy += (Math.random() - 0.5) * 0.04;
+          n.x += n.vx;
+          n.y += n.vy;
+          if (n.x < -20) n.x = w + 20;
+          else if (n.x > w + 20) n.x = -20;
+          if (n.y < -20) n.y = h + 20;
+          else if (n.y > h + 20) n.y = -20;
+        }
+      }
+
+      ctx.lineWidth = 0.7;
+      for (let i = 0; i < nodes.length; i++) {
+        const a = nodes[i];
+        for (let j = i + 1; j < nodes.length; j++) {
+          const b = nodes[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const d2 = dx * dx + dy * dy;
+          if (d2 > LINK * LINK) continue;
+          ctx.globalAlpha = (1 - Math.sqrt(d2) / LINK) * 0.22;
+          ctx.strokeStyle = colors.line;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+
+      if (pointer.active) {
+        ctx.lineWidth = 0.9;
+        for (const n of nodes) {
+          const d = Math.hypot(pointer.x - n.x, pointer.y - n.y);
+          if (d > CURSOR_LINK) continue;
+          ctx.globalAlpha = (1 - d / CURSOR_LINK) * 0.55;
+          ctx.strokeStyle = colors.line;
+          ctx.beginPath();
+          ctx.moveTo(pointer.x, pointer.y);
+          ctx.lineTo(n.x, n.y);
+          ctx.stroke();
+        }
+      }
+
+      ctx.fillStyle = colors.dot;
+      for (const n of nodes) {
+        const near = pointer.active && Math.hypot(pointer.x - n.x, pointer.y - n.y) < CURSOR_LINK;
+        ctx.globalAlpha = near ? 0.95 : 0.45;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, near ? n.r + 0.6 : n.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    const loop = () => {
+      draw(true);
+      raf = requestAnimationFrame(loop);
+    };
+
+    const start = () => {
+      cancelAnimationFrame(raf);
+      if (reduced.matches || document.hidden) draw(false);
+      else raf = requestAnimationFrame(loop);
+    };
+
+    readColors();
+    resize();
+    start();
+
+    let resizeTimer = 0;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        resize();
+        start();
+      }, 150);
+    });
+    document.addEventListener('visibilitychange', start);
+    reduced.addEventListener('change', start);
+    new MutationObserver(() => {
+      readColors();
+      if (reduced.matches) draw(false);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    if (finePointer.matches) {
+      window.addEventListener(
+        'pointermove',
+        (e) => {
+          pointer.x = e.clientX;
+          pointer.y = e.clientY;
+          pointer.active = true;
+        },
+        { passive: true },
+      );
+      document.documentElement.addEventListener('pointerleave', () => (pointer.active = false));
+    }
+  }
+</script>

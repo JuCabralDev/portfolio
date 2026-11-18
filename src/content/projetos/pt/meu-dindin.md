@@ -12,7 +12,7 @@ status:
   text: OK
   note: em desenvolvimento ativo
 kind: projeto pessoal
-stack: [Java 21, Spring Boot 4, JDBC, SQLite, BCrypt, JUnit 5, HTML/CSS/JS]
+stack: [Java, SQL, Spring Boot, JDBC, SQLite, BCrypt, JUnit, Spotless, GitHub Actions, HTML, CSS, JavaScript]
 source:
   label: privado, disponível sob pedido
 diagram: dindin
