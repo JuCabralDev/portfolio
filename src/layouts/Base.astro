@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
 import SiteHeader from '../components/SiteHeader.astro';
 import NetworkBackground from '../components/NetworkBackground.astro';
 import { profile } from '../data/profile';
@@ -116,8 +116,13 @@ const personJsonLd = JSON.stringify({
     <main id="conteudo" class="mx-auto w-full max-w-6xl px-4 sm:px-8">
       <slot />
     </main>
-    <footer class="mx-auto w-full max-w-6xl px-4 py-12 text-sm text-muted sm:px-8">
-      <a href="https://github.com/JuCabralDev/portfolio">{t('footer.source')}</a>
+    <footer class="border-t border-line">
+      <div
+        class="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-10 font-mono text-xs text-muted [font-stretch:87.5%] sm:px-8"
+      >
+        <p>© {new Date().getFullYear()} {profile.name} · {t('footer.place')}</p>
+        <a href={`${getRelativeLocaleUrl(lang)}#top`} class="no-underline hover:text-text">{t('footer.top')}</a>
+      </div>
     </footer>
   </body>
 </html>
