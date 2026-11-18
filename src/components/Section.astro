@@ -1,0 +1,24 @@
+---
+/**
+ * Seção da página única. O título é a própria rota da seção (GET /projetos),
+ * e o mesmo slug é a âncora usada pela navegação.
+ */
+interface Props {
+  id: string;
+  route: string;
+  method?: string;
+}
+
+const { id, route, method = 'GET' } = Astro.props;
+---
+
+<section id={id} aria-labelledby={`${id}-titulo`} class="border-t border-line py-16 sm:py-24">
+  <h2
+    id={`${id}-titulo`}
+    class="mb-10 flex items-baseline gap-3 font-mono text-2xl font-semibold tracking-tight [font-stretch:112.5%] sm:text-4xl"
+  >
+    <span class="text-xs font-medium tracking-normal text-accent [font-stretch:87.5%] sm:text-sm">{method}</span>
+    <span>/{route}</span>
+  </h2>
+  <slot />
+</section>

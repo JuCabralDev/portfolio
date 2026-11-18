@@ -1,0 +1,53 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import ThemeToggle from './ThemeToggle.astro';
+import { sections, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const otherLang: Lang = lang === 'pt' ? 'en' : 'pt';
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur supports-[backdrop-filter]:bg-bg/75"
+>
+  <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-8">
+    <a href="#top" class="font-mono text-sm font-medium tracking-tight no-underline [font-stretch:87.5%]">
+      julia<span class="text-accent">.</span>medeiros
+    </a>
+
+    <nav aria-label={t('nav.label')} class="order-last -mx-1 w-full overflow-x-auto md:order-none md:w-auto md:flex-1">
+      <ul class="flex gap-1 font-mono text-xs [font-stretch:87.5%]">
+        {
+          sections.map((s) => (
+            <li>
+              <a
+                href={`#${s}`}
+                class="block rounded px-2 py-1 whitespace-nowrap text-muted no-underline hover:bg-surface hover:text-text"
+              >
+                /{t(`nav.${s}`)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="ml-auto flex items-center gap-2 md:ml-0">
+      <a
+        href={getRelativeLocaleUrl(otherLang)}
+        hreflang={otherLang}
+        lang={otherLang}
+        class="rounded px-2 py-1 font-mono text-xs text-muted no-underline [font-stretch:87.5%] hover:bg-surface hover:text-text"
+        aria-label={t('lang.switch')}
+      >
+        {otherLang}
+      </a>
+      <ThemeToggle labelToLight={t('theme.toLight')} labelToDark={t('theme.toDark')} />
+    </div>
+  </div>
+</header>
