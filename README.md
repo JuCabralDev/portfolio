@@ -59,8 +59,8 @@ Não usa cookies e não exige banner de consentimento. Não há código de analy
 
 ## Decisões
 
-- **Página única, sem JS de framework:** o conteúdo é estático; só o toggle de tema e a animação do hero usam
-  scripts pequenos.
+- **Página única, sem JS de framework:** o conteúdo é estático. Tema, boot, terminal do hero e fundo interativo
+  são scripts pequenos e opcionais: sem JS (ou com reduced motion) a página abre direto e completa.
 - **Tema escuro por padrão:** a preferência fica no `localStorage`. Um script inline aplica o tema antes da
   pintura, para a tela não piscar.
 - **Repositórios privados:** dois dos projetos são privados (um deles é de cliente). Por isso aparecem com
