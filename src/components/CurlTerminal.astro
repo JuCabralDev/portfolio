@@ -1,0 +1,132 @@
+---
+/**
+ * O momento marcante da página: um `curl` para a "API" pessoal, digitado uma vez,
+ * seguido da resposta HTTP com o JSON. O conteúdo inteiro já vem no HTML (legível sem JS);
+ * o script só anima. Com prefers-reduced-motion nada se move.
+ */
+interface Props {
+  command: string;
+  body: Record<string, string | string[] | boolean>;
+  label: string;
+}
+
+const { command, body, label } = Astro.props;
+
+type Token = { cls: string; text: string };
+type Line = Token[];
+
+// Monta o JSON já tokenizado, para colorir chave, string e booleano sem lib de highlight.
+const value = (v: string | boolean): Token =>
+  typeof v === 'boolean' ? { cls: 'tok-bool', text: String(v) } : { cls: 'tok-str', text: JSON.stringify(v) };
+
+const entries = Object.entries(body);
+const lines: Line[] = [[{ cls: 'tok-punct', text: '{' }]];
+entries.forEach(([key, v], i) => {
+  const comma: Token[] = i < entries.length - 1 ? [{ cls: 'tok-punct', text: ',' }] : [];
+  const head: Token[] = [
+    { cls: '', text: '  ' },
+    { cls: 'tok-key', text: JSON.stringify(key) },
+    { cls: 'tok-punct', text: ': ' },
+  ];
+  if (Array.isArray(v)) {
+    const items: Token[] = v.flatMap((item, j) => [
+      value(item),
+      ...(j < v.length - 1 ? [{ cls: 'tok-punct', text: ', ' }] : []),
+    ]);
+    lines.push([...head, { cls: 'tok-punct', text: '[' }, ...items, { cls: 'tok-punct', text: ']' }, ...comma]);
+  } else {
+    lines.push([...head, value(v), ...comma]);
+  }
+});
+lines.push([{ cls: 'tok-punct', text: '}' }]);
+---
+
+<figure class="curl-terminal min-w-0" aria-label={label}>
+  <pre
+    class="overflow-x-auto rounded-lg border whitespace-pre-wrap break-words sm:whitespace-pre border-line bg-surface p-5 font-mono text-[0.72rem] leading-relaxed [font-stretch:87.5%] sm:p-6 sm:text-[0.8rem]"><code><span class="block"><span class="text-accent select-none" aria-hidden="true">$ </span><span data-command>{command}</span><span class="curl-caret" aria-hidden="true"></span></span><span class="block h-3" aria-hidden="true"></span><span data-response class="block"><span class="block"><span class="text-muted">HTTP/1.1 </span><span class="text-ok">200 OK</span></span><span class="block text-muted">Content-Type: application/json</span><span class="block h-3" aria-hidden="true"></span>{lines.map((line) => (<span class="block pl-[4ch] -indent-[4ch]">{line.map((tok) => (<span class={tok.cls}>{tok.text}</span>))}</span>))}</span></code></pre>
+</figure>
+
+<style>
+  .tok-key {
+    color: var(--code-key);
+  }
+  .tok-str {
+    color: var(--code-string);
+  }
+  .tok-bool {
+    color: var(--code-number);
+  }
+  .tok-punct {
+    color: var(--muted);
+  }
+
+  .curl-caret {
+    display: none;
+  }
+
+  /* Estado inicial da animação: só quando há JS (classe .js no <html>) e movimento permitido. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .curl-terminal:not(.is-done) [data-response] {
+      visibility: hidden;
+    }
+    :global(.js) .curl-terminal.is-typing .curl-caret {
+      display: inline-block;
+      width: 0.6em;
+      height: 1.1em;
+      margin-left: 1px;
+      vertical-align: text-bottom;
+      background: var(--accent);
+      animation: blink 1s steps(1) infinite;
+    }
+    .curl-terminal.is-done [data-response] > :global(span) {
+      animation: line-in 0.25s ease-out both;
+      animation-delay: calc(var(--i, 0) * 45ms);
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes line-in {
+    from {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('.curl-terminal').forEach((root) => {
+    const cmd = root.querySelector<HTMLElement>('[data-command]');
+    const response = root.querySelector<HTMLElement>('[data-response]');
+    if (!cmd || !response || reduced) {
+      root.classList.add('is-done');
+      return;
+    }
+
+    Array.from(response.children).forEach((el, i) => (el as HTMLElement).style.setProperty('--i', String(i)));
+
+    const full = cmd.textContent ?? '';
+    cmd.textContent = '';
+    root.classList.add('is-typing');
+
+    let i = 0;
+    const tick = () => {
+      i += 1;
+      cmd.textContent = full.slice(0, i);
+      if (i < full.length) {
+        window.setTimeout(tick, 28 + Math.random() * 40);
+      } else {
+        window.setTimeout(() => {
+          root.classList.remove('is-typing');
+          root.classList.add('is-done');
+        }, 350);
+      }
+    };
+    window.setTimeout(tick, 500);
+  });
+</script>
