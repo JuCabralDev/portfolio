@@ -134,7 +134,7 @@ export const content: Record<Lang, Content> = {
       'By day I work as a systems assistant at a hospital complex, where I write multi-join SQL queries, configure systems and act as the link between the team and the software vendor. After hours I build systems with Java 21 and Spring Boot. The two main ones are further down.',
     ],
     stack: [
-      { group: 'languages', items: ['Java 21', 'SQL', 'JavaScript'] },
+      { group: 'programming', items: ['Java 21', 'SQL', 'JavaScript'] },
       {
         group: 'back-end',
         items: ['Spring Boot', 'Spring Security', 'Spring Data JPA', 'JDBC', 'REST APIs', 'Flyway'],
