@@ -1,0 +1,13 @@
+// Configuração do Worker que serve o site (Cloudflare Workers com static assets).
+// O build (npm run build) gera dist/; o deploy (npx wrangler deploy) publica essa pasta.
+{
+  "name": "portfolio",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    // Caminho inexistente responde 404 com a nossa página (dist/404.html).
+    "not_found_handling": "404-page",
+    // /en e /en/ servem a mesma página, com redirecionamento para a barra final.
+    "html_handling": "auto-trailing-slash"
+  }
+}

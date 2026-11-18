@@ -9,7 +9,7 @@ apresentados como respostas de uma API: rota, status, stack, decisões de arquit
 - Tailwind CSS 4, com tokens de cor em CSS custom properties (tema escuro padrão + claro)
 - i18n nativo do Astro: `pt` na raiz, `en` em `/en/`
 - Fontes self-hosted via Fontsource: Martian Mono e Schibsted Grotesk
-- Deploy estático no Cloudflare Pages
+- Deploy no Cloudflare Workers (static assets), configurado em `wrangler.jsonc`
 
 ## Rodando local
 
@@ -54,8 +54,14 @@ Precisa do Chromium. Rode de novo quando mudar nome, cargo ou foto.
 
 ## Analytics
 
-Cloudflare Web Analytics, ativado no painel do projeto no Cloudflare Pages, que injeta o script no deploy.
-Não usa cookies e não exige banner de consentimento. Não há código de analytics no repositório.
+Cloudflare Web Analytics, sem cookies e sem banner de consentimento. O script só entra no HTML se a variável de
+build `PUBLIC_CF_ANALYTICS_TOKEN` estiver definida no Worker (Settings → Build → Variables). O token é público:
+ele aparece no HTML de qualquer site que usa o Web Analytics.
+
+## Deploy
+
+Cada push na `main` dispara o Workers Builds da Cloudflare: `npm run build` e depois `npx wrangler deploy`, que
+publica `dist/` conforme o `wrangler.jsonc` (404 com a nossa página e barra final nas URLs).
 
 ## Decisões
 

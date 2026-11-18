@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jucabraldev.pages.dev/sitemap-index.xml
+Sitemap: https://portfolio.julia-cabral-medeiros.workers.dev/sitemap-index.xml
