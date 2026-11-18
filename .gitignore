@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # material pessoal (CV, foto, dados) antes de virar conteúdo
 _input/
+
+# estado local do wrangler dev
+.wrangler/

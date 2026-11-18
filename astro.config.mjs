@@ -5,8 +5,8 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: trocar pela URL definitiva do Cloudflare Pages (ou domínio próprio) na fase de deploy.
-  site: 'https://jucabraldev.pages.dev',
+  // URL pública (Cloudflare Workers). Trocar aqui e em public/robots.txt se ganhar domínio próprio.
+  site: 'https://portfolio.julia-cabral-medeiros.workers.dev',
   i18n: {
     locales: ['pt', 'en'],
     defaultLocale: 'pt',

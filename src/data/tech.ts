@@ -7,7 +7,7 @@ import {
   siApachemaven,
   siAstro,
   siCaddy,
-  siCloudflarepages,
+  siCloudflareworkers,
   siCss,
   siDocker,
   siFlyway,
@@ -82,7 +82,7 @@ const registry: Record<string, TechIcon> = {
   astro: brand(siAstro),
   'tailwind css': brand(siTailwindcss),
   shiki: highlight,
-  'cloudflare pages': brand(siCloudflarepages),
+  'cloudflare workers': brand(siCloudflareworkers),
 };
 
 export function techIcon(name: string): TechIcon | undefined {

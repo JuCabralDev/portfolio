@@ -11,7 +11,7 @@ status:
   text: OK
   note: no ar
 kind: projeto pessoal
-stack: [Astro, TypeScript, Tailwind CSS, Shiki, GitHub Actions, Cloudflare Pages]
+stack: [Astro, TypeScript, Tailwind CSS, Shiki, GitHub Actions, Cloudflare Workers]
 source:
   label: público
   url: https://github.com/JuCabralDev/portfolio

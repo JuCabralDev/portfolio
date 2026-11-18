@@ -11,7 +11,7 @@ status:
   text: OK
   note: live
 kind: personal project
-stack: [Astro, TypeScript, Tailwind CSS, Shiki, GitHub Actions, Cloudflare Pages]
+stack: [Astro, TypeScript, Tailwind CSS, Shiki, GitHub Actions, Cloudflare Workers]
 source:
   label: public
   url: https://github.com/JuCabralDev/portfolio
