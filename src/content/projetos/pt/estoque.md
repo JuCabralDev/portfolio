@@ -12,7 +12,7 @@ status:
   text: Partial Content
   note: 'fases 1 a 3 de 5 prontas: login, catálogo e estoque, venda no balcão'
 kind: sistema para uma loja real
-stack: [Java 21, Spring Boot 4, Spring Security, Spring Data JPA, PostgreSQL 17, Flyway, Testcontainers, Docker Compose, React 19]
+stack: [Java, SQL, Spring Boot, Spring Security, Spring Data JPA, PostgreSQL, Flyway, JUnit, Testcontainers, Docker Compose, Caddy, React, TypeScript]
 source:
   label: privado, disponível sob pedido
 diagram: estoque

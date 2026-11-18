@@ -1,0 +1,62 @@
+---
+/**
+ * Nome de uma tecnologia com o ícone. O ícone fica na cor do texto secundário e ganha a cor da marca
+ * no hover (clareada no tema escuro e escurecida no claro, para manter contraste).
+ */
+import { readableHex, techIcon } from '../data/tech';
+
+interface Props {
+  name: string;
+  variant?: 'inline' | 'chip';
+}
+
+const { name, variant = 'inline' } = Astro.props;
+const icon = techIcon(name);
+const style = icon
+  ? `--brand-d:${readableHex(icon.hex, '#1a1310')};--brand-l:${readableHex(icon.hex, '#f6f4f1')}`
+  : undefined;
+---
+
+<span class:list={['tech', variant]} style={style}>
+  {
+    icon && (
+      <svg class="tech-icon" viewBox={icon.viewBox} aria-hidden="true" focusable="false">
+        {icon.mode === 'fill' ? (
+          <path d={icon.path} fill="currentColor" />
+        ) : (
+          <path d={icon.path} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        )}
+      </svg>
+    )
+  }
+  <span>{name}</span>
+</span>
+
+<style>
+  .tech {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    white-space: nowrap;
+  }
+  .tech-icon {
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
+    color: var(--muted);
+    transition: color 0.15s ease;
+  }
+  .tech:hover .tech-icon {
+    color: var(--brand-d, var(--accent));
+  }
+  :global(:root[data-theme='light']) .tech:hover .tech-icon {
+    color: var(--brand-l, var(--accent));
+  }
+  .chip {
+    padding: 0.3em 0.65em;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 0.8125rem;
+  }
+</style>

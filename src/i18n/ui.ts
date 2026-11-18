@@ -31,7 +31,8 @@ export const ui = {
     'lang.switch': 'Read in English',
     'hero.photoAlt': 'Foto de Júlia Cabral',
     'hero.terminalLabel': 'Exemplo de requisição à minha API pessoal, com a resposta em JSON',
-    'footer.source': 'Código deste site no GitHub',
+    'footer.place': 'Natal, Brasil',
+    'footer.top': 'Voltar ao topo',
   },
   en: {
     'meta.title': 'Júlia Cabral | Java Back-end Developer',
@@ -50,7 +51,8 @@ export const ui = {
     'lang.switch': 'Ler em português',
     'hero.photoAlt': 'Photo of Júlia Cabral',
     'hero.terminalLabel': 'Sample request to my personal API, with the JSON response',
-    'footer.source': 'Source code of this site on GitHub',
+    'footer.place': 'Natal, Brazil',
+    'footer.top': 'Back to top',
   },
 } as const;
 

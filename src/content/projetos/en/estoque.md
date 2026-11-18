@@ -12,7 +12,7 @@ status:
   text: Partial Content
   note: 'phases 1 to 3 of 5 done: login, catalog and stock, counter sales'
 kind: system for a real shop
-stack: [Java 21, Spring Boot 4, Spring Security, Spring Data JPA, PostgreSQL 17, Flyway, Testcontainers, Docker Compose, React 19]
+stack: [Java, SQL, Spring Boot, Spring Security, Spring Data JPA, PostgreSQL, Flyway, JUnit, Testcontainers, Docker Compose, Caddy, React, TypeScript]
 source:
   label: private, available on request
 diagram: estoque

@@ -100,7 +100,13 @@ lines.push([{ cls: 'tok-punct', text: '}' }]);
 <script>
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  document.querySelectorAll<HTMLElement>('.curl-terminal').forEach((root) => {
+  // Com a tela de boot na frente, a digitação só começa quando ela sai.
+  const whenVisible = (fn: () => void) =>
+    document.documentElement.classList.contains('booting')
+      ? document.addEventListener('boot:done', fn, { once: true })
+      : fn();
+
+  document.querySelectorAll<HTMLElement>('.curl-terminal').forEach((root) => whenVisible(() => {
     const cmd = root.querySelector<HTMLElement>('[data-command]');
     const response = root.querySelector<HTMLElement>('[data-response]');
     if (!cmd || !response || reduced) {
@@ -128,5 +134,5 @@ lines.push([{ cls: 'tok-punct', text: '}' }]);
       }
     };
     window.setTimeout(tick, 500);
-  });
+  }));
 </script>

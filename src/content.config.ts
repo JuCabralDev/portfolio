@@ -23,7 +23,8 @@ const projetos = defineCollection({
     /** Nome do cliente: só preencher com autorização. Sem ele, o texto fica genérico. */
     clientName: z.string().optional(),
     diagram: z.enum(['estoque', 'dindin']).optional(),
-    decisions: z.array(z.string()).min(1),
+    /** Opcional: um projeto pode mostrar só resumo, tecnologias e link (ex.: este portfólio). */
+    decisions: z.array(z.string()).default([]),
     limits: z.array(z.string()).default([]),
     /** Arquivos em src/snippets/, com título e legenda no idioma do projeto. */
     snippets: z.array(z.object({ file: z.string(), title: z.string(), caption: z.string() })).default([]),

@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import Section from './Section.astro';
 import Hero from './Hero.astro';
+import BootScreen from './BootScreen.astro';
 import ProjetoEndpoint from './ProjetoEndpoint.astro';
+import TechTag from './TechTag.astro';
 import { getCollection } from 'astro:content';
 import { content } from '../data/content';
 import { profile } from '../data/profile';
@@ -25,31 +27,36 @@ const contactLinks = [
 ];
 ---
 
-<Base lang={lang}>
+<Base lang={lang} boot>
+  <BootScreen lang={lang} projectCount={projetos.length} />
   <Hero lang={lang} c={c} />
 
   <Section id="sobre" route={t('nav.sobre')}>
-    <div class="max-w-[65ch] space-y-5 text-lg">
+    <div class="max-w-[65ch] space-y-4">
       {c.about.map((p) => <p>{p}</p>)}
     </div>
   </Section>
 
   <Section id="stack" route={t('nav.stack')}>
-    <div class="grid gap-14 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-      <dl class="grid max-w-[65ch] gap-x-8 gap-y-4 sm:grid-cols-[9rem_1fr]">
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+      <dl class="grid gap-x-8 gap-y-5 sm:grid-cols-[7.5rem_1fr]">
         {
           c.stack.map(({ group, items }) => (
             <>
-              <dt class="pt-0.5 font-mono text-xs text-muted [font-stretch:87.5%] sm:text-sm">{group}</dt>
-              <dd class="-mt-3 mb-2 sm:m-0">{items.join(', ')}</dd>
+              <dt class="pt-0.5 font-mono text-xs text-muted [font-stretch:87.5%]">{group}</dt>
+              <dd class="-mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[0.94rem] sm:m-0">
+                {items.map((name) => (
+                  <TechTag name={name} />
+                ))}
+              </dd>
             </>
           ))
         }
       </dl>
 
       <div>
-        <h3 class="font-mono text-sm text-accent [font-stretch:87.5%]">{c.studying.title}</h3>
-        <ul class="mt-4 space-y-4">
+        <h3 class="font-mono text-xs text-accent [font-stretch:87.5%]">{c.studying.title}</h3>
+        <ul class="mt-4 space-y-4 text-[0.94rem]">
           {
             c.studying.items.map(({ name, why }) => (
               <li>
@@ -68,17 +75,17 @@ const contactLinks = [
   </Section>
 
   <Section id="experiencia" route={t('nav.experiencia')}>
-    <ol class="max-w-[72ch] border-l border-line">
+    <ol class="max-w-[70ch] border-l border-line">
       {
         c.experience.map((job) => (
-          <li class="relative pb-12 pl-6 last:pb-0 sm:pl-8">
-            <span class="absolute top-2 -left-[5px] size-[9px] rounded-full border border-accent bg-bg" aria-hidden="true" />
+          <li class="relative pb-10 pl-6 last:pb-0 sm:pl-8">
+            <span class="absolute top-1.5 -left-[5px] size-[9px] rounded-full border border-accent bg-bg" aria-hidden="true" />
             <p class="font-mono text-xs text-muted [font-stretch:87.5%]">
               <time datetime={job.start}>{job.period}</time>
             </p>
-            <h3 class="mt-1 text-xl font-semibold">{job.role}</h3>
+            <h3 class="mt-1 text-lg font-semibold">{job.role}</h3>
             <p class="text-muted">{job.org}</p>
-            <ul class="mt-4 list-disc space-y-2 pl-5 marker:text-line">
+            <ul class="mt-3 list-disc space-y-1.5 pl-5 text-[0.94rem] marker:text-line">
               {job.bullets.map((b) => <li>{b}</li>)}
             </ul>
           </li>
@@ -88,12 +95,12 @@ const contactLinks = [
   </Section>
 
   <Section id="formacao" route={t('nav.formacao')}>
-    <ul class="max-w-[72ch] space-y-6">
+    <ul class="max-w-[70ch] space-y-6">
       {
         c.education.map((e) => (
           <li>
             <p class="font-mono text-xs text-muted [font-stretch:87.5%]">{e.period}</p>
-            <h3 class="mt-1 text-xl font-semibold">{e.course}</h3>
+            <h3 class="mt-1 text-lg font-semibold">{e.course}</h3>
             <p class="text-muted">{e.school}</p>
           </li>
         ))
@@ -102,14 +109,14 @@ const contactLinks = [
   </Section>
 
   <Section id="contato" route={t('nav.contato')} method="POST">
-    <p class="max-w-[50ch] text-lg">{c.contact.lead}</p>
-    <dl class="mt-10 grid max-w-2xl gap-x-8 gap-y-3 sm:grid-cols-[9rem_1fr]">
+    <p class="max-w-[50ch]">{c.contact.lead}</p>
+    <dl class="mt-8 grid max-w-2xl gap-x-8 gap-y-3 sm:grid-cols-[7.5rem_1fr]">
       {
         contactLinks.map((l) => (
           <>
-            <dt class="font-mono text-xs text-muted [font-stretch:87.5%] sm:pt-1 sm:text-sm">{l.label}</dt>
+            <dt class="font-mono text-xs text-muted [font-stretch:87.5%] sm:pt-1">{l.label}</dt>
             <dd class="-mt-2 mb-3 min-w-0 sm:m-0">
-              <a href={l.href} download={l.download} class="text-lg font-medium break-words underline">
+              <a href={l.href} download={l.download} class="font-medium break-words underline">
                 {l.text}
               </a>
             </dd>
