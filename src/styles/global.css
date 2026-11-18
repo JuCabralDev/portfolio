@@ -36,6 +36,21 @@
   --code-number: #9a5800;
 }
 
+/* Shiki (tema css-variables) usando os mesmos tokens: os trechos trocam de cor junto com o tema. */
+:root {
+  --astro-code-foreground: var(--text);
+  --astro-code-background: var(--surface);
+  --astro-code-token-keyword: var(--accent);
+  --astro-code-token-string: var(--code-string);
+  --astro-code-token-string-expression: var(--code-string);
+  --astro-code-token-constant: var(--code-key);
+  --astro-code-token-function: var(--text);
+  --astro-code-token-parameter: var(--text);
+  --astro-code-token-comment: var(--muted);
+  --astro-code-token-punctuation: var(--muted);
+  --astro-code-token-link: var(--accent);
+}
+
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
