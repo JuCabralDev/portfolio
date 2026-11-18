@@ -25,13 +25,33 @@ npm run preview  # serve o build
 
 ```text
 src/
-├── components/   # Home, SiteHeader, Section, ThemeToggle...
-├── i18n/ui.ts    # textos de interface PT/EN + helpers
-├── layouts/      # Base.astro (head, tema, header, footer)
-├── pages/        # / (pt) e /en/
-└── styles/       # global.css: tokens, fontes, base
-docs/design.md    # decisões visuais
+├── components/          # Home, Hero, CurlTerminal, ProjetoEndpoint, diagramas/...
+├── content/projetos/    # um .md por projeto e idioma (schema em content.config.ts)
+├── snippets/            # trechos de código exibidos nos projetos
+├── data/                # textos das seções (content.ts) e contato (profile.ts)
+├── i18n/ui.ts           # textos de interface PT/EN + helpers
+├── layouts/Base.astro   # head (SEO, OG, hreflang, JSON-LD), tema, header, footer
+├── pages/               # / (pt), /en/ e 404
+└── styles/global.css    # tokens, fontes, cores do Shiki
+scripts/og/              # template e script da imagem de compartilhamento
+docs/design.md           # decisões visuais
 ```
+
+## Adicionar um projeto
+
+1. Crie `src/content/projetos/pt/<nome>.md` e `src/content/projetos/en/<nome>.md` com o mesmo `route`.
+2. Se tiver trechos de código, coloque os arquivos em `src/snippets/` e referencie pelo nome em `snippets`.
+3. `npm run check` valida os campos. Um projeto incompleto quebra o build.
+
+## Imagem de compartilhamento
+
+`scripts/og/render.sh` gera `public/og-pt.png` e `public/og-en.png` (1200x630) a partir de `scripts/og/og.html`.
+Precisa do Chromium. Rode de novo quando mudar nome, cargo ou foto.
+
+## Analytics
+
+Cloudflare Web Analytics, ativado no painel do projeto no Cloudflare Pages, que injeta o script no deploy.
+Não usa cookies e não exige banner de consentimento. Não há código de analytics no repositório.
 
 ## Decisões
 
