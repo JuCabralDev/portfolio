@@ -16,6 +16,7 @@ export interface Content {
   /** Corpo do JSON que o `curl` do hero devolve. Chaves no idioma da página. */
   apiResponse: Record<string, string | string[] | boolean>;
   about: string[];
+  languages: { title: string; items: { name: string; level: string }[] };
   stack: { group: string; items: string[] }[];
   studying: { title: string; items: { name: string; why: string }[] };
   experience: Job[];
@@ -51,6 +52,13 @@ export const content: Record<Lang, Content> = {
       { group: 'infra', items: ['Docker', 'GitHub Actions', 'Maven', 'Linux', 'Caddy'] },
       { group: 'front-end', items: ['HTML', 'CSS', 'React', 'TypeScript'] },
     ],
+    languages: {
+      title: 'idiomas',
+      items: [
+        { name: 'Português', level: 'nativo' },
+        { name: 'Inglês', level: 'B2' },
+      ],
+    },
     studying: {
       title: 'estudando agora',
       items: [
@@ -136,6 +144,13 @@ export const content: Record<Lang, Content> = {
       { group: 'infra', items: ['Docker', 'GitHub Actions', 'Maven', 'Linux', 'Caddy'] },
       { group: 'front-end', items: ['HTML', 'CSS', 'React', 'TypeScript'] },
     ],
+    languages: {
+      title: 'languages',
+      items: [
+        { name: 'Portuguese', level: 'native' },
+        { name: 'English', level: 'B2' },
+      ],
+    },
     studying: {
       title: 'learning now',
       items: [
