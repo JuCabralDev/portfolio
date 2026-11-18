@@ -32,8 +32,24 @@ const contactLinks = [
   <Hero lang={lang} c={c} />
 
   <Section id="sobre" route={t('nav.sobre')}>
-    <div class="max-w-[65ch] space-y-4">
-      {c.about.map((p) => <p>{p}</p>)}
+    <div class="grid gap-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+      <div class="max-w-[65ch] space-y-4">
+        {c.about.map((p) => <p>{p}</p>)}
+      </div>
+
+      <div>
+        <h3 class="font-mono text-xs text-accent [font-stretch:87.5%]">{c.languages.title}</h3>
+        <dl class="mt-4 max-w-sm border-t border-line text-[0.94rem]">
+          {
+            c.languages.items.map(({ name, level }) => (
+              <div class="flex items-baseline justify-between gap-4 border-b border-line py-2.5">
+                <dt>{name}</dt>
+                <dd class="font-mono text-xs text-muted [font-stretch:87.5%]">{level}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
     </div>
   </Section>
 
