@@ -15,9 +15,4 @@ stack: [Astro, TypeScript, Tailwind CSS, Shiki, GitHub Actions, Cloudflare Pages
 source:
   label: public
   url: https://github.com/JuCabralDev/portfolio
-decisions:
-  - 'Static HTML, no JavaScript framework in the browser. Scripts (theme, coffee boot screen, terminal and interactive background) are small and optional: the content shows up without them.'
-  - 'Projects live in schema-validated content collections: an invalid status or diagram breaks the build, not the page.'
-  - 'Dark and light themes with CSS tokens and an inline script that applies the theme before first paint, so it never flashes.'
-  - 'Every phase landed through a pull request, with CI running `astro check` and the build.'
 ---

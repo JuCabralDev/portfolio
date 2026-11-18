@@ -96,7 +96,8 @@ const personJsonLd = JSON.stringify({
         try {
           var wantsBoot = document.currentScript && document.currentScript.dataset.boot === '1';
           var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          if (wantsBoot && !reduced && sessionStorage.getItem('jc.booted') !== '1') {
+          // Link direto para uma seção (#projetos...) vai direto ao conteúdo, sem boot.
+          if (wantsBoot && !reduced && !location.hash && sessionStorage.getItem('jc.booted') !== '1') {
             document.documentElement.classList.add('booting');
           }
         } catch (e) {}

@@ -8,6 +8,7 @@ import type { CollectionEntry } from 'astro:content';
 import DiagramaEstoque from './diagramas/DiagramaEstoque.astro';
 import DiagramaDindin from './diagramas/DiagramaDindin.astro';
 import TechTag from './TechTag.astro';
+import { siGithub } from 'simple-icons';
 import type { Lang } from '../i18n/ui';
 
 interface Props {
@@ -26,8 +27,8 @@ const snippetCode = (file: string): string => {
 };
 
 const L = {
-  pt: { stack: 'tecnologias usadas', type: 'X-Tipo', source: 'X-Codigo', decisions: 'decisões técnicas', limits: 'limitações e próximos passos', code: 'trechos de código', diagram: 'arquitetura' },
-  en: { stack: 'technologies used', type: 'X-Type', source: 'X-Source', decisions: 'technical decisions', limits: 'limitations and next steps', code: 'code excerpts', diagram: 'architecture' },
+  pt: { repo: 'Ver o código no GitHub', stack: 'tecnologias usadas', type: 'X-Tipo', source: 'X-Codigo', decisions: 'decisões técnicas', limits: 'limitações e próximos passos', code: 'trechos de código', diagram: 'arquitetura' },
+  en: { repo: 'View the code on GitHub', stack: 'technologies used', type: 'X-Type', source: 'X-Source', decisions: 'technical decisions', limits: 'limitations and next steps', code: 'code excerpts', diagram: 'architecture' },
 }[lang];
 
 /** Divide um texto em pedaços normais e `código`, para renderizar crases como <code>. */
@@ -36,6 +37,7 @@ const inline = (text: string) =>
     part.startsWith('`') ? { code: true, text: part.slice(1, -1) } : { code: false, text: part },
   );
 const hasAside = Boolean(p.diagram);
+const hasBody = hasAside || p.decisions.length > 0 || p.limits.length > 0;
 ---
 
 <article id={`projeto-${p.route}`} aria-labelledby={`projeto-${p.route}-titulo`} class="projeto border-b border-line py-12 first-of-type:pt-0 last-of-type:border-b-0 last-of-type:pb-0">
@@ -61,17 +63,31 @@ const hasAside = Boolean(p.diagram);
     {p.stack.map((name) => <li><TechTag name={name} variant="chip" /></li>)}
   </ul>
 
+  {
+    p.source.url && (
+      <a href={p.source.url} class="repo-link mt-6 inline-flex items-center gap-2 rounded-md border border-line bg-surface px-3.5 py-2 text-[0.94rem] font-medium no-underline hover:border-accent">
+        <svg viewBox="0 0 24 24" class="size-4" aria-hidden="true"><path fill="currentColor" d={siGithub.path} /></svg>
+        {L.repo}
+      </a>
+    )
+  }
+
+  {hasBody && (
   <div class={`mt-10 grid gap-10 ${hasAside ? 'lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]' : ''}`}>
     <div class="max-w-[65ch] min-w-0">
-      <h4 class="font-mono text-sm text-accent [font-stretch:87.5%]">{L.decisions}</h4>
-      <ul class="mt-4 list-disc space-y-2.5 pl-5 text-[0.94rem] marker:text-line">
-        {p.decisions.map((d) => <li>{inline(d).map((seg) => (seg.code ? <code class="inline-code">{seg.text}</code> : seg.text))}</li>)}
-      </ul>
+      {p.decisions.length > 0 && (
+        <>
+          <h4 class="font-mono text-sm text-accent [font-stretch:87.5%]">{L.decisions}</h4>
+          <ul class="mt-4 mb-10 list-disc space-y-2.5 pl-5 text-[0.94rem] marker:text-line">
+            {p.decisions.map((d) => <li>{inline(d).map((seg) => (seg.code ? <code class="inline-code">{seg.text}</code> : seg.text))}</li>)}
+          </ul>
+        </>
+      )}
 
       {
         p.limits.length > 0 && (
           <>
-            <h4 class="mt-10 font-mono text-sm text-accent [font-stretch:87.5%]">{L.limits}</h4>
+            <h4 class="font-mono text-sm text-accent [font-stretch:87.5%]">{L.limits}</h4>
             <ul class="mt-4 list-disc space-y-2.5 pl-5 text-[0.94rem] text-muted marker:text-line">
               {p.limits.map((l) => <li>{inline(l).map((seg) => (seg.code ? <code class="inline-code">{seg.text}</code> : seg.text))}</li>)}
             </ul>
@@ -92,6 +108,7 @@ const hasAside = Boolean(p.diagram);
       )
     }
   </div>
+  )}
 
   {
     p.snippets.length > 0 && (
