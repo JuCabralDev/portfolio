@@ -1,0 +1,81 @@
+---
+import './diagrama.css';
+import type { Lang } from '../../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const s = {
+  pt: {
+    title: 'Arquitetura do Meu Dindin',
+    desc: 'O navegador conversa com a API Spring Boot em 127.0.0.1. A API tem três camadas: api, service e repository. O repository grava no SQLite via JDBC, e o service busca cotações na brapi.dev através da interface QuoteProvider.',
+    browser: 'navegador',
+    browserSub: 'HTML, CSS e JavaScript puros',
+    local: '127.0.0.1 (só local)',
+    apiSub: 'controllers, sessão com expiração',
+    serviceSub: 'regras, BigDecimal, AssetLedger',
+    repoSub: 'interfaces + implementação SQLite',
+    sqliteSub: 'arquivo local',
+    brapiSub: 'QuoteProvider + cron',
+  },
+  en: {
+    title: 'Meu Dindin architecture',
+    desc: 'The browser talks to the Spring Boot API on 127.0.0.1. The API has three layers: api, service and repository. The repository writes to SQLite via JDBC, and the service fetches quotes from brapi.dev through the QuoteProvider interface.',
+    browser: 'browser',
+    browserSub: 'plain HTML, CSS and JavaScript',
+    local: '127.0.0.1 (local only)',
+    apiSub: 'controllers, expiring sessions',
+    serviceSub: 'rules, BigDecimal, AssetLedger',
+    repoSub: 'interfaces + SQLite implementation',
+    sqliteSub: 'local file',
+    brapiSub: 'QuoteProvider + cron',
+  },
+}[lang];
+---
+
+<svg class="diagrama" viewBox="0 0 360 330" role="img" aria-labelledby="dg-dindin-t dg-dindin-d">
+  <title id="dg-dindin-t">{s.title}</title>
+  <desc id="dg-dindin-d">{s.desc}</desc>
+  <defs>
+    <marker id="dg-dindin-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path class="head" d="M0 0 8 4 0 8z"></path>
+    </marker>
+  </defs>
+
+  <rect class="box" x="30" y="8" width="300" height="44" rx="6"></rect>
+  <text class="t" x="46" y="27">{s.browser}</text>
+  <text class="s" x="46" y="43">{s.browserSub}</text>
+
+  <path class="wire" d="M180 52v30" marker-end="url(#dg-dindin-arrow)"></path>
+  <text class="lbl" x="190" y="71">{s.local}</text>
+
+  <rect class="box" x="30" y="84" width="300" height="172" rx="6"></rect>
+  <text class="t" x="46" y="103">Spring Boot 4 (Java 21)</text>
+
+  <rect class="box" x="46" y="114" width="268" height="36" rx="5"></rect>
+  <text class="t" x="60" y="130">api</text>
+  <text class="s" x="60" y="143">{s.apiSub}</text>
+  <path class="wire" d="M180 150v10" marker-end="url(#dg-dindin-arrow)"></path>
+
+  <rect class="box-accent" x="46" y="162" width="268" height="36" rx="5"></rect>
+  <text class="t" x="60" y="178">service</text>
+  <text class="s" x="60" y="191">{s.serviceSub}</text>
+  <path class="wire" d="M180 198v10" marker-end="url(#dg-dindin-arrow)"></path>
+
+  <rect class="box" x="46" y="210" width="268" height="36" rx="5"></rect>
+  <text class="t" x="60" y="226">repository</text>
+  <text class="s" x="60" y="239">{s.repoSub}</text>
+
+  <path class="wire" d="M102 256v24" marker-end="url(#dg-dindin-arrow)"></path>
+  <text class="lbl" x="110" y="272">JDBC</text>
+  <rect class="box" x="30" y="282" width="144" height="40" rx="6"></rect>
+  <text class="t" x="46" y="299">SQLite</text>
+  <text class="s" x="46" y="313">{s.sqliteSub}</text>
+
+  <path class="wire-dashed" d="M314 180h30v122h-12" marker-end="url(#dg-dindin-arrow)"></path>
+  <rect class="box" x="182" y="282" width="148" height="40" rx="6"></rect>
+  <text class="t" x="196" y="299">brapi.dev</text>
+  <text class="s" x="196" y="313">{s.brapiSub}</text>
+</svg>

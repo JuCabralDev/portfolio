@@ -27,7 +27,7 @@ export const content: Record<Lang, Content> = {
   pt: {
     headline: 'Desenvolvedora Back-end Java',
     intro:
-      'Construo APIs e sistemas em Java e Spring Boot, do modelo de dados ao deploy. Um deles controla hoje o estoque e as vendas de uma loja de verdade.',
+      'Construo APIs e sistemas em Java e Spring Boot, do modelo de dados ao deploy. Um deles foi feito para o estoque e as vendas de uma loja de verdade.',
     cvLabel: 'Baixar CV',
     apiResponse: {
       nome: 'Júlia Cabral',
@@ -112,7 +112,7 @@ export const content: Record<Lang, Content> = {
   en: {
     headline: 'Java Back-end Developer',
     intro:
-      'I build APIs and systems with Java and Spring Boot, from the data model to deployment. One of them runs the inventory and sales of a real shop today.',
+      'I build APIs and systems with Java and Spring Boot, from the data model to deployment. One of them was built for the inventory and sales of a real shop.',
     cvLabel: 'Download CV (PT)',
     apiResponse: {
       name: 'Júlia Cabral',

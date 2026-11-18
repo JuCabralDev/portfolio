@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Section from './Section.astro';
 import Hero from './Hero.astro';
+import ProjetoEndpoint from './ProjetoEndpoint.astro';
+import { getCollection } from 'astro:content';
 import { content } from '../data/content';
 import { profile } from '../data/profile';
 import { useTranslations, type Lang } from '../i18n/ui';
@@ -13,6 +15,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const c = content[lang];
+const projetos = (await getCollection('projetos', (e) => e.data.lang === lang)).sort((a, b) => a.data.order - b.data.order);
 
 const contactLinks = [
   { label: c.contact.email, href: `mailto:${profile.email}`, text: profile.email },
@@ -61,7 +64,7 @@ const contactLinks = [
   </Section>
 
   <Section id="projetos" route={t('nav.projetos')}>
-    <p class="max-w-[65ch] text-muted">TODO: fase 3 (projetos).</p>
+    {projetos.map((projeto) => <ProjetoEndpoint projeto={projeto} />)}
   </Section>
 
   <Section id="experiencia" route={t('nav.experiencia')}>
