@@ -9,5 +9,8 @@
     "not_found_handling": "404-page",
     // /en e /en/ servem a mesma página, com redirecionamento para a barra final.
     "html_handling": "auto-trailing-slash"
-  }
+  },
+  // Os builds de PR rodam `npx wrangler preview`, que exige este bloco (pode ficar vazio):
+  // cada PR ganha uma URL de prévia com a mesma configuração de assets acima.
+  "previews": {}
 }
