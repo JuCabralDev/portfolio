@@ -10,13 +10,15 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const otherLang: Lang = lang === 'pt' ? 'en' : 'pt';
+// Links absolutos para a home do idioma: funcionam também fora dela (ex.: na 404).
+const home = getRelativeLocaleUrl(lang);
 ---
 
 <header
   class="sticky top-0 z-40 border-b border-line bg-bg/90 backdrop-blur supports-[backdrop-filter]:bg-bg/75"
 >
   <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 sm:px-8">
-    <a href="#top" class="font-mono text-sm font-medium tracking-tight no-underline [font-stretch:87.5%]">
+    <a href={`${home}#top`} class="font-mono text-sm font-medium tracking-tight no-underline [font-stretch:87.5%]">
       júlia<span class="text-accent">.</span>cabral
     </a>
 
@@ -26,7 +28,7 @@ const otherLang: Lang = lang === 'pt' ? 'en' : 'pt';
           navSections.map((s) => (
             <li>
               <a
-                href={`#${s}`}
+                href={`${home}#${s}`}
                 class="block rounded px-2 py-1 whitespace-nowrap text-muted no-underline hover:bg-surface hover:text-text"
               >
                 /{t(`nav.${s}`)}
@@ -43,9 +45,8 @@ const otherLang: Lang = lang === 'pt' ? 'en' : 'pt';
         hreflang={otherLang}
         lang={otherLang}
         class="rounded px-2 py-1 font-mono text-xs text-muted no-underline [font-stretch:87.5%] hover:bg-surface hover:text-text"
-        aria-label={t('lang.switch')}
       >
-        {otherLang}
+        {otherLang}<span class="sr-only"> ({t('lang.switch')})</span>
       </a>
       <ThemeToggle labelToLight={t('theme.toLight')} labelToDark={t('theme.toDark')} />
     </div>

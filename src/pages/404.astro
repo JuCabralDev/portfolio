@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base lang="pt" title="404 | Júlia Cabral" description="Página não encontrada." noindex>
+  <div class="py-24 sm:py-36">
+    <p class="font-mono text-sm [font-stretch:87.5%]">
+      <span class="text-accent">GET</span> <span data-path class="break-all">/</span>
+    </p>
+    <h1 class="mt-2 font-mono text-3xl font-semibold tracking-tight [font-stretch:112.5%] sm:text-5xl">
+      <span class="text-muted">HTTP/1.1</span> 404 Not Found
+    </h1>
+    <p class="mt-8 max-w-[50ch] text-lg">Essa página não existe. Talvez o link tenha mudado.</p>
+    <p class="mt-2 max-w-[50ch] text-lg text-muted" lang="en">This page doesn't exist. The link may have changed.</p>
+    <div class="mt-10 flex flex-wrap gap-x-6 gap-y-3">
+      <a href="/" class="rounded-md bg-accent px-4 py-2.5 font-medium text-accent-ink no-underline hover:brightness-110">Ir para o início</a>
+      <a href="/en/" lang="en" class="self-center font-medium underline">Go to the home page</a>
+    </div>
+  </div>
+</Base>
+
+<script>
+  // Mostra o caminho pedido no lugar do "/" genérico.
+  const el = document.querySelector('[data-path]');
+  if (el) el.textContent = window.location.pathname;
+</script>

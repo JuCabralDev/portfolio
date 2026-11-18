@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jucabraldev.pages.dev/sitemap-index.xml
